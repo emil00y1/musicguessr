@@ -4,6 +4,7 @@ import { SubmitButton } from "@/components/submit-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import SpotifyLoginButton from "@/components/spotify-login-button";
 
 export default async function Login(props: { searchParams: Promise<Message> }) {
   const searchParams = await props.searchParams;
@@ -38,6 +39,18 @@ export default async function Login(props: { searchParams: Promise<Message> }) {
           Sign in
         </SubmitButton>
         <FormMessage message={searchParams} />
+      </div>
+      
+      {/* Divider and Spotify login */}
+      <div className="mt-6">
+        <div className="relative flex items-center">
+          <div className="flex-grow border-t border-gray-300"></div>
+          <span className="flex-shrink mx-4 text-gray-600 text-sm">Or continue with</span>
+          <div className="flex-grow border-t border-gray-300"></div>
+        </div>
+        <div className="mt-4">
+          <SpotifyLoginButton />
+        </div>
       </div>
     </form>
   );
