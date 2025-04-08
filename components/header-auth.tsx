@@ -50,25 +50,30 @@ export default async function AuthButton() {
     );
   }
   return user ? (
-    <div className="flex items-center gap-4">
-     
-      <div className="flex gap-2">
-          <Link href="/protected"> {user.user_metadata?.picture && (
-          <Image 
-            src={user.user_metadata.picture}
-            alt="Account button with profile picture"
-            width={32}
-            height={32}
-            className="rounded-full"
-          />
-        )}</Link>
-        <form action={signOutAction}>
-          <Button type="submit" size="sm" variant={"outline"}>
-            Sign out
-          </Button>
-        </form>
+    <>
+    
+      <div className="flex items-center gap-4">
+         <Button className="bg-purple-600 hover:bg-purple-700 text-white" asChild size="sm">
+          <Link href="/play">Play</Link>
+        </Button> 
+        <div className="flex gap-2 ml-4">
+            <Link href="/protected"> {user.user_metadata?.picture && (
+            <Image 
+              src={user.user_metadata.picture}
+              alt="Account button with profile picture"
+              width={32}
+              height={32}
+              className="rounded-full"
+            />
+          )}</Link>
+          <form action={signOutAction}>
+            <Button type="submit" size="sm" variant={"outline"}>
+              Sign out
+            </Button>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   ) : (
     <div className="flex gap-2">
       <Button asChild size="sm" variant={"outline"}>
