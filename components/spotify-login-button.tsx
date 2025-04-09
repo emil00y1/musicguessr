@@ -11,7 +11,8 @@ export default function SpotifyLoginButton() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'spotify',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?redirect_to=/protected`
+        redirectTo: `${window.location.origin}/auth/callback?redirect_to=/protected`,
+        scopes: 'streaming user-read-email user-read-private user-modify-playback-state',
       }
     });
     
