@@ -40,7 +40,7 @@ export function useGameState(): UseGameStateReturn {
     setLoading(true);
     try {
       // Fetch random songs from Spotify API
-      const tracks = await getRandomTracksByDecade(1950, 2025, 5);
+      const tracks = await getRandomTracksByDecade(1950, 2025, 10);
 
       if (!tracks || tracks.length < 5) {
         throw new Error("Could not fetch enough tracks. Please try again.");
