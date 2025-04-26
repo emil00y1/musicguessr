@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
-      <section className="relative py-20 px-4 md:py-32 md:px-6 flex items-center justify-center overflow-hidden bg-gradient-to-br from-background to-purple-50 dark:from-background dark:to-purple-950/20">
+      <section className="relative py-20 px-4 md:py-32 md:px-6 flex items-center justify-center overflow-hidden bg-gradient-to-br from-background to-purple-950/20 dark:from-background dark:to-purple-950/20">
         <div className="absolute inset-0 bg-[size:20px_20px] bg-[linear-gradient(to_right,rgba(100,100,100,0.1)_1px,transparent_1px),linear-gradient(to_bottom,rgba(100,100,100,0.1)_1px,transparent_1px)] opacity-5"></div>
         <div className="container max-w-6xl mx-auto z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -21,7 +21,7 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Button size="lg" asChild className="bg-purple-600 hover:bg-purple-700 text-white">
-                  <Link href="/sign-in">Play Now with Spotify</Link>
+                  <Link href="/play">Play Now with Spotify</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
                   <Link href="#how-to-play">Learn More</Link>
@@ -64,21 +64,21 @@ export default function Home() {
         <div className="container max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">How to Play</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+            <Card className="p-6 flex flex-col items-center text-center">
               <div className="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mb-4">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">1</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Start with a Year</h3>
               <p className="text-muted-foreground">Begin with a random year on your timeline as your anchor point.</p>
             </Card>
-            <Card className="p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+            <Card className="p-6 flex flex-col items-center text-center">
               <div className="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mb-4">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">2</span>
               </div>
               <h3 className="text-xl font-semibold mb-2">Listen & Place</h3>
               <p className="text-muted-foreground">Hear a song snippet and place it on the timeline based on when you think it was released.</p>
             </Card>
-            <Card className="p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+            <Card className="p-6 flex flex-col items-center text-center">
               <div className="w-16 h-16 rounded-full bg-purple-100 dark:bg-purple-900 flex items-center justify-center mb-4">
                 <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">3</span>
               </div>
@@ -94,28 +94,28 @@ export default function Home() {
         <div className="container max-w-6xl mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Game Modes</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
               <div className="h-2 bg-green-500"></div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3">Classic Mode</h3>
-                <p className="text-muted-foreground mb-4">Create a perfect timeline with 10 songs. How close can you get to the actual release years?</p>
-                <p className="text-sm text-muted-foreground">Bonus points for guessing artist and song names!</p>
+                <h3 className="text-xl font-semibold mb-3 transition-colors duration-125 group-hover:text-green-500">Classic Mode</h3>
+                <p className="text-muted-foreground mb-4 transition-colors duration-125 group-hover:text-gray-700 dark:group-hover:text-gray-300">Create a perfect timeline with 10 songs. How close can you get to the actual release years?</p>
+                <p className="text-sm text-muted-foreground transition-colors duration-125 group-hover:text-gray-600 dark:group-hover:text-gray-400">Bonus points for guessing artist and song names!</p>
               </div>
             </Card>
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
               <div className="h-2 bg-blue-500"></div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3">Infinite Mode</h3>
-                <p className="text-muted-foreground mb-4">Keep playing until you make a mistake or decide to stop. How long can you last?</p>
-                <p className="text-sm text-muted-foreground">Challenge yourself to beat your own high score!</p>
+                <h3 className="text-xl font-semibold mb-3 transition-colors duration-125 group-hover:text-blue-500">Infinite Mode</h3>
+                <p className="text-muted-foreground mb-4 transition-colors duration-125 group-hover:text-gray-700 dark:group-hover:text-gray-300">Keep playing until you make a mistake or decide to stop. How long can you last?</p>
+                <p className="text-sm text-muted-foreground transition-colors duration-125 group-hover:text-gray-600 dark:group-hover:text-gray-400">Challenge yourself to beat your own high score!</p>
               </div>
             </Card>
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow">
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group">
               <div className="h-2 bg-purple-500"></div>
               <div className="p-6">
-                <h3 className="text-xl font-semibold mb-3">Versus Friends</h3>
-                <p className="text-muted-foreground mb-4">Compete against friends to see who has the best knowledge of music history.</p>
-                <p className="text-sm text-muted-foreground">Compare scores and climb the leaderboard!</p>
+                <h3 className="text-xl font-semibold mb-3 transition-colors duration-125 group-hover:text-purple-500">Versus Friends</h3>
+                <p className="text-muted-foreground mb-4 transition-colors duration-125 group-hover:text-gray-700 dark:group-hover:text-gray-300">Compete against friends to see who has the best knowledge of music history.</p>
+                <p className="text-sm text-muted-foreground transition-colors duration-125 group-hover:text-gray-600 dark:group-hover:text-gray-400">Compare scores and climb the leaderboard!</p>
               </div>
             </Card>
           </div>
@@ -130,7 +130,7 @@ export default function Home() {
             Sign in with your Spotify account to start playing and see how well you know your favorite music.
           </p>
           <Button size="lg" asChild className="bg-purple-600 hover:bg-purple-700 text-white">
-            <Link href="/sign-in">Play Now</Link>
+            <Link href="/play">Play Now</Link>
           </Button>
         </div>
       </section>

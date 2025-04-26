@@ -38,7 +38,7 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center items-center border-b border-b-foreground/10 h-16">
+              <nav className="w-full flex justify-center items-center border-b border-b-foreground/10 h-16 max-w-[1440px] px-4">
                 <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
                   <div className="flex gap-5 items-center font-semibold">
                     <Link href={"/"}>musicguessr</Link>
@@ -47,7 +47,7 @@ export default function RootLayout({
                 </div>
                 <ThemeSwitcher />
               </nav>
-              <div className="flex flex-col gap-20 p-5 w-full">
+              <div className="flex flex-col gap-20 py-5 w-full">
                 {children}
               </div>
 
