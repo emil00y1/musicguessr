@@ -18,7 +18,7 @@ export default function ReadyScreen({
 }: ReadyScreenProps): React.ReactElement {
   return (
     <div className="flex flex-col items-center justify-center h-screen p-4">
-      <h1 className="text-3xl font-bold mb-8">Hitster</h1>
+      <h1 className="text-3xl font-bold mb-8">musicguessr</h1>
       <p className="mb-8 text-center max-w-md">
         Test your music knowledge! Place songs on the timeline based on their
         release year.

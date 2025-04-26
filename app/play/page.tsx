@@ -70,19 +70,79 @@ export default function PlayGame(): React.ReactElement {
     }
   };
 
+  // Check if placement is chronologically correct
+  const isChronologicallyCorrect = (songYear: number, position: number): boolean => {
+    // Get the selected spot's position in the timeline
+    const selectedSpotPosition = placementSpots[selectedSpot!].position;
+    
+    // Find the years of songs that would be before and after this position
+    let prevSongYear: number | null = null;
+    let nextSongYear: number | null = null;
+    
+    // Sort the timeline by placedPosition to ensure we're checking in visual order
+    const sortedTimeline = [...timeline].sort((a, b) => {
+      if (a.placedPosition === undefined) return -1;
+      if (b.placedPosition === undefined) return 1;
+      return a.placedPosition - b.placedPosition;
+    });
+    
+    // Check each song in the timeline to find the ones before and after the selected position
+    sortedTimeline.forEach(song => {
+      // Skip songs without a placed position
+      if (song.placedPosition === undefined) return;
+      
+      // For songs placed before the selected position, find the most recent one
+      if (song.placedPosition < selectedSpotPosition) {
+        if (prevSongYear === null || song.year > prevSongYear) {
+          prevSongYear = song.year;
+        }
+      }
+      
+      // For songs placed after the selected position, find the earliest one
+      if (song.placedPosition > selectedSpotPosition) {
+        if (nextSongYear === null || song.year < nextSongYear) {
+          nextSongYear = song.year;
+        }
+      }
+    });
+    
+    // Check if the placement violates chronological order
+    if (prevSongYear !== null && songYear < prevSongYear) {
+      console.log(`Chronological error: Song from ${songYear} cannot come before song from ${prevSongYear}`);
+      return false; // Song is older than the most recent song placed earlier
+    }
+    
+    if (nextSongYear !== null && songYear > nextSongYear) {
+      console.log(`Chronological error: Song from ${songYear} cannot come after song from ${nextSongYear}`);
+      return false; // Song is newer than the earliest song placed later
+    }
+    
+    return true;
+  };
+
   // Handle placing a song on the timeline
-  const placeSongOnTimeline = (): void => {
+  const placeSongOnTimeline = async (): Promise<void> => {
     if (!currentSong || selectedSpot === null) return;
 
     const selectedPosition = placementSpots[selectedSpot];
     if (!selectedPosition) return;
 
-    // Add song to timeline
-    addSongToTimeline(currentSong, selectedPosition.position);
+    // Pause the song when placement is confirmed
+    if (isPlaying) {
+      await pauseTrack();
+    }
 
-    // Calculate score based on placement
-    const pointsEarned = calculateScore(currentSong.year);
-    const isCorrect = pointsEarned >= 50; // Define "correct" as 50+ points
+    // Check if placement is chronologically correct
+    const isCorrect = isChronologicallyCorrect(currentSong.year, selectedPosition.position);
+
+    // Calculate score based on placement accuracy
+    const pointsEarned = isCorrect ? calculateScore(currentSong.year) : 0;
+
+    if (isCorrect) {
+      // Only add song to timeline if placement is chronologically correct
+      addSongToTimeline(currentSong, selectedPosition.position);
+    }
+    // Note: If not correct, we don't add the song to the timeline at all
 
     // Complete the round
     completeRound(pointsEarned, isCorrect);

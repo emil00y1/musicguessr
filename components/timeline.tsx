@@ -1,5 +1,7 @@
 import React from "react";
-import { TimelineItem, PlacementSpot } from "@/types/types";
+import { TimelineItem, PlacementSpot, SpotifyTrack, RoundResultData } from "@/types/types";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface TimelineProps {
   timeline: TimelineItem[];
@@ -8,6 +10,7 @@ interface TimelineProps {
   onSelectSpot: (index: number) => void;
   selectedSpot: number | null;
   placementSpots: PlacementSpot[];
+  onConfirmPlacement?: () => void;
 }
 
 export function Timeline({
@@ -17,56 +20,103 @@ export function Timeline({
   onSelectSpot,
   selectedSpot,
   placementSpots,
+  onConfirmPlacement,
 }: TimelineProps) {
+  // Sort timeline by placedPosition
+  const sortedTimeline = [...timeline].sort((a, b) => {
+    if (a.placedPosition === undefined) return -1;
+    if (b.placedPosition === undefined) return 1;
+    return a.placedPosition - b.placedPosition;
+  });
+  
+  // Find the maximum position value to determine grid size
+  let maxPosition = 0;
+  sortedTimeline.forEach(item => {
+    if (item.placedPosition !== undefined && item.placedPosition > maxPosition) {
+      maxPosition = item.placedPosition;
+    }
+  });
+  
+  // Calculate total columns needed for the grid
+  // We need (maxPosition + 1) columns for songs and (maxPosition + 2) columns for placement spots
+  const totalColumns = (maxPosition + 1) * 2 + 1;
+  
   return (
     <div className="relative h-[300px] bg-muted/20 rounded-lg p-4 mb-8">
       {/* Main timeline line */}
-      <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 dark:bg-gray-700 transform -translate-y-1/2"></div>
+      <div className="absolute top-1/2 left-0 right-0 h-1 bg-gray-300 dark:bg-gray-700 transform -translate-y-1/2 z-0"></div>
 
-      {/* Render timeline markers and placed songs */}
-      {timeline.map((item, index) => (
-        <div
-          key={item.id}
-          className="absolute top-1/2 transform -translate-y-1/2"
-          style={{
-            left: `${(index / (timeline.length - 1 || 1)) * 80 + 10}%`,
-            transition: "all 0.5s ease-in-out",
-          }}
-        >
-          {item.isMarker ? (
-            <div className="bg-purple-600 text-white font-bold rounded-full h-16 w-16 flex items-center justify-center text-lg -translate-x-1/2">
-              {item.year}
+      {/* Grid container */}
+      <div 
+        className="grid h-full items-center relative"
+        style={{ gridTemplateColumns: `repeat(${totalColumns}, 1fr)` }}
+      >
+        {/* Render placement spots */}
+        {!roundResult && currentSong && placementSpots.map((spot, index) => {
+          // Calculate the grid column for this placement spot
+          // Placement spots are in odd-numbered columns (1, 3, 5, etc.)
+          const columnStart = spot.position * 2 + 1;
+          
+          return (
+            <div 
+              key={`spot-${index}`} 
+              className="flex justify-center items-center"
+              style={{ gridColumn: columnStart }}
+            >
+              <button
+                className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center cursor-pointer z-10",
+                  selectedSpot === index
+                    ? "bg-green-500"
+                    : "bg-red-500 hover:bg-red-400"
+                )}
+                onClick={() => onSelectSpot(index)}
+                aria-label={`Place song ${spot.label}`}
+              >
+                {selectedSpot === index && "✓"}
+              </button>
             </div>
-          ) : (
-            <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-md w-32 -translate-x-1/2">
-              <div className="text-xs truncate">{item.name}</div>
-              <div className="text-xs text-muted-foreground truncate">
-                {item.artist}
+          );
+        })}
+
+        {/* Render timeline items (songs) */}
+        {sortedTimeline.map((item, index) => {
+          // Calculate the grid column for this song
+          // Songs are in even-numbered columns (2, 4, 6, etc.)
+          // If placedPosition is defined, use it to determine the column
+          // Otherwise, fall back to the index (for the initial song)
+          const position = item.placedPosition !== undefined ? item.placedPosition : index;
+          const columnStart = position * 2 + 2;
+          
+          return (
+            <div
+              key={item.id}
+              className="flex justify-center items-center"
+              style={{ gridColumn: columnStart }}
+            >
+              <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-md w-32 z-10">
+                <div className="text-xs truncate">{item.name}</div>
+                <div className="text-xs text-muted-foreground truncate">
+                  {item.artist}
+                </div>
+                <div className="text-xs font-semibold mt-1">{item.year}</div>
               </div>
-              <div className="text-xs font-semibold mt-1">{item.year}</div>
             </div>
-          )}
-        </div>
-      ))}
-
-      {/* Placement spots (only shown when not showing round result) */}
-      {!roundResult &&
-        currentSong &&
-        placementSpots.map((spot, index) => (
-          <button
-            key={`spot-${index}`}
-            className={`absolute top-1/2 transform -translate-y-1/2 w-8 h-8 rounded-full ${
-              selectedSpot === index
-                ? "bg-green-500"
-                : "bg-red-500 hover:bg-red-400"
-            } flex items-center justify-center -ml-4 cursor-pointer z-10`}
-            style={{ left: `${spot.position * 80 + 10}%` }}
-            onClick={() => onSelectSpot(index)}
-            aria-label={`Place song ${spot.label}`}
+          );
+        })}
+      </div>
+        
+      {/* Confirm placement button */}
+      {!roundResult && selectedSpot !== null && onConfirmPlacement && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
+          <Button
+            onClick={onConfirmPlacement}
+            className="bg-purple-600 hover:bg-purple-700 text-white"
           >
-            {selectedSpot === index && "✓"}
-          </button>
-        ))}
+            Confirm Placement
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

@@ -146,7 +146,7 @@ export const createSpotifyPlayer = (): Promise<SpotifyPlayerAPI> => {
 
       // Create player
       player = new window.Spotify.Player({
-        name: "Hitster Game Player",
+        name: "musicguessr Game Player",
         getOAuthToken: async (callback: (token: string) => void) => {
           // This function will be called when the player needs a fresh token
           try {

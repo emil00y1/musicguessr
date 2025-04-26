@@ -53,7 +53,7 @@ export function useGameState(): UseGameStateReturn {
       const middleIndex = Math.floor(sortedTracks.length / 2);
       const initialSong = sortedTracks[middleIndex];
 
-      // Create a timeline with the initial marker
+      // Create a timeline with the initial song (not as a marker)
       setTimeline([
         {
           id: initialSong.id,
@@ -62,8 +62,8 @@ export function useGameState(): UseGameStateReturn {
           year: initialSong.year,
           uri: initialSong.uri,
           albumCover: initialSong.albumCover,
-          isMarker: true,
-          placedPosition: undefined,
+          isMarker: false, // Changed from true to false to display as a song
+          placedPosition: 0, // Set initial position to 0 to ensure proper placement
         },
       ]);
 
@@ -86,6 +86,15 @@ export function useGameState(): UseGameStateReturn {
 
   const addSongToTimeline = (song: SpotifyTrack, position: number): void => {
     const newTimeline = [...timeline];
+    
+    // Shift positions of existing songs that are at or after the insertion point
+    for (const item of newTimeline) {
+      if (item.placedPosition !== undefined && item.placedPosition >= position) {
+        item.placedPosition += 1;
+      }
+    }
+    
+    // Add the new song at the specified position
     newTimeline.push({
       id: song.id,
       name: song.name,
@@ -97,7 +106,17 @@ export function useGameState(): UseGameStateReturn {
       placedPosition: position,
     });
 
-    setTimeline(newTimeline);
+    // Sort the timeline by placedPosition to ensure correct visual ordering
+    const sortedTimeline = newTimeline.sort((a, b) => {
+      // Handle undefined placedPosition (should be rare, but just in case)
+      if (a.placedPosition === undefined) return -1;
+      if (b.placedPosition === undefined) return 1;
+      
+      // Sort by placedPosition
+      return a.placedPosition - b.placedPosition;
+    });
+
+    setTimeline(sortedTimeline);
   };
 
   const completeRound = (pointsEarned: number, isCorrect: boolean): void => {
@@ -108,9 +127,15 @@ export function useGameState(): UseGameStateReturn {
 
     let feedback = "";
     if (isCorrect) {
-      feedback = `Great job! You correctly placed "${currentSong.name}" from ${currentSong.year}.`;
+      if (pointsEarned >= 80) {
+        feedback = `Perfect! You correctly placed "${currentSong.name}" from ${currentSong.year}.`;
+      } else if (pointsEarned >= 50) {
+        feedback = `Great job! You correctly placed "${currentSong.name}" from ${currentSong.year}.`;
+      } else {
+        feedback = `Good try! "${currentSong.name}" was released in ${currentSong.year}.`;
+      }
     } else {
-      feedback = `This song "${currentSong.name}" was released in ${currentSong.year}.`;
+      feedback = `Chronological error! "${currentSong.name}" from ${currentSong.year} doesn't fit there in the timeline. Try the next song.`;
     }
 
     // Set round result with all required fields including feedback
@@ -119,7 +144,7 @@ export function useGameState(): UseGameStateReturn {
       correctYear: currentSong.year,
       pointsEarned,
       isCorrect,
-      feedback, // Add this required property
+      feedback,
     });
 
     // Move to next song or end game after a delay

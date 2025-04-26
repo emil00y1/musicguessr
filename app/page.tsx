@@ -14,7 +14,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-                Test your music knowledge with <span className="text-purple-600 dark:text-purple-400">Hitster</span>
+                Test your music knowledge with <span className="text-purple-600 dark:text-purple-400">musicguessr</span>
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground">
                 Place songs on a timeline based on their release year. How well do you know music history?

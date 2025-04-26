@@ -36,9 +36,9 @@ export default function PlayingScreen({
   placementSpots,
 }: PlayingScreenProps): React.ReactElement {
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
+    <div className="container mx-auto p-4 max-w-screen-xl">
       <div className="mb-8 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Hitster</h1>
+        <h1 className="text-xl font-bold">musicguessr</h1>
         <div className="text-xl font-semibold">Score: {score}</div>
       </div>
 
@@ -49,6 +49,7 @@ export default function PlayingScreen({
         onSelectSpot={onSelectSpot}
         selectedSpot={selectedSpot}
         placementSpots={placementSpots}
+        onConfirmPlacement={onConfirmPlacement}
       />
 
       {currentSong && !roundResult && (
@@ -57,7 +58,6 @@ export default function PlayingScreen({
           isPlaying={isPlaying}
           onPlayPause={onPlayPause}
           selectedSpot={selectedSpot}
-          onConfirmPlacement={onConfirmPlacement}
           placementSpots={placementSpots}
         />
       )}
