@@ -135,7 +135,7 @@ export function useGameState(): UseGameStateReturn {
         feedback = `Good try! "${currentSong.name}" was released in ${currentSong.year}.`;
       }
     } else {
-      feedback = `Chronological error! "${currentSong.name}" from ${currentSong.year} doesn't fit there in the timeline. Try the next song.`;
+      feedback = `Incorrect! "${currentSong.name}" is from ${currentSong.year}. Try the next song.`;
     }
 
     // Set round result with all required fields including feedback
@@ -158,7 +158,7 @@ export function useGameState(): UseGameStateReturn {
         // End game
         setGameState("gameOver");
       }
-    }, 3000); // Show result for 3 seconds
+    }, nextIndex < songs.length ? 3000 : 5000);
   };
 
   const resetGame = (): void => {

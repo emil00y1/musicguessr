@@ -48,7 +48,7 @@ export function Timeline({
 
       {/* Grid container */}
       <div 
-        className="grid h-full items-center relative"
+        className="grid h-full items-center relative grid-rows-1"
         style={{ gridTemplateColumns: `repeat(${totalColumns}, 1fr)` }}
       >
         {/* Render placement spots */}
@@ -91,7 +91,7 @@ export function Timeline({
           return (
             <div
               key={item.id}
-              className="flex justify-center items-center"
+              className="flex justify-center items-center row-[1]"
               style={{ gridColumn: columnStart }}
             >
               <div className="bg-white dark:bg-gray-800 p-3 rounded-lg shadow-md w-32 z-10">
